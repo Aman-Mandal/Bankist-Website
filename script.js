@@ -7,6 +7,8 @@ const modal = document.querySelector('.modal')
 const overlay = document.querySelector('.overlay')
 const btnCloseModal = document.querySelector('.btn--close-modal')
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal')
+const btnScrollTo = document.querySelector('.btn--scroll-to')
+const section1 = document.getElementById('section--1')
 
 const openModal = function (e) {
   e.preventDefault()
@@ -19,8 +21,10 @@ const closeModal = function () {
   overlay.classList.add('hidden')
 }
 
+// open modal
 btnsOpenModal.forEach(btn => btn.addEventListener('click', openModal))
 
+// close modal
 btnCloseModal.addEventListener('click', closeModal)
 
 overlay.addEventListener('click', closeModal)
@@ -31,113 +35,196 @@ document.addEventListener('keydown', function (e) {
   }
 })
 
-const btnScrollTo = document.querySelector('.btn--scroll-to')
-const section1 = document.getElementById('section--1')
-
+// ScrollTo Button
 btnScrollTo.addEventListener('click', function (e) {
   const s1coords = section1.getBoundingClientRect()
   console.log(s1coords)
+
   section1.scrollIntoView({ behavior: 'smooth' })
 })
 
-////////////////////////
-///////////////////////
-//////////////////////
-// Practice
+// Page Navigation
 
-// ----------------Selecting, Creating and Deleting -----------------
+// Note : By using ScrollIntoView on every particular link... it needs to create that callback function
+// every time.. which is way too much
 
-// ----------Selecting-------
+// ---------By Using "ScrollIntoView"---------
+// document.querySelectorAll('.nav__link').forEach(function (link) {
+//   link.addEventListener('click', function (e) {
+//     e.preventDefault()
+//     const id = this.getAttribute('href')
+//     // console.log(id)
+//     document.querySelector(id).scrollIntoView({ behavior: 'smooth' })
+//   })
+// })
 
-console.log(document.documentElement) // Selects whole document
-console.log(document.head) // Selects head of html
-console.log(document.body) // Selects body
+// ---------------EVENT DELEGATION ----------------
 
-console.log(document.querySelector('.header'))
+// 1. Add eventListener to the common parent element
+document.querySelector('.nav__links').addEventListener('click', function (e) {
+  e.preventDefault()
+  // e.target gives the element on which the event has happened
+  // console.log(e.target)
 
-// Note : It returns a NODELIST
-const sections = console.log(document.querySelectorAll('.section'))
+  // 2. Determine which element originated the event
+  // Matching Strategy
+  if (e.target.classList.contains('nav__link')) {
+    const id = e.target.getAttribute('href')
+    document.querySelector(id).scrollIntoView({ behavior: 'smooth' })
+  }
+})
 
-document.getElementById('section--1')
 
-// Note : Both returns a HTMLCollection
-document.getElementsByTagName('button') // selects element by the html name
-document.getElementsByClassName('btn') // selects element by the class
+// ////////////////////////
+// ///////////////////////
+// //////////////////////
+// // Practice
 
-// ------Creating -----------
+// // ----------------Selecting, Creating and Deleting -----------------
 
-// insertAdjacentElement
+// // ----------Selecting-------
 
-// createElement()
-const message = document.createElement('div')
-message.classList.add('cookie-message')
+// console.log(document.documentElement) // Selects whole document
+// console.log(document.head) // Selects head of html
+// console.log(document.body) // Selects body
 
-message.innerHTML =
-  'We use cookies in this website . <button class = "btn btn--close-cookie" >Got It!</button> '
+// console.log(document.querySelector('.header'))
 
-const header = document.querySelector('.header')
+// // Note : It returns a NODELIST
+// const sections = console.log(document.querySelectorAll('.section'))
 
-// --------Inserting elements-----
+// document.getElementById('section--1')
 
-// header.prepend(message) // Adds element to the first position of header
-header.append(message) // Adds element to the last of header
+// // Note : Both returns a HTMLCollection
+// document.getElementsByTagName('button') // selects element by the html name
+// document.getElementsByClassName('btn') // selects element by the class
 
-// header.before(message) // Adds before the header
-// header.after(message) // Adds after the header
+// // ------Creating -----------
 
-// ------------Deleting ------------
+// // insertAdjacentElement
 
-document
-  .querySelector('.btn--close-cookie')
-  .addEventListener('click', function () {
-    message.remove() // deletes the element
-    // message.parentElement.removeChild(message)
-  })
+// // createElement()
+// const message = document.createElement('div')
+// message.classList.add('cookie-message')
 
-// ----------- Styles ---------------
+// message.innerHTML =
+//   'We use cookies in this website . <button class = "btn btn--close-cookie" >Got It!</button> '
 
-message.style.backgroundColor = '#37383d'
-message.style.width = '120%'
+// const header = document.querySelector('.header')
 
-// Note : getComputedStyle() gives the style of the CSS sheet
-console.log(getComputedStyle(message).height)
+// // --------Inserting elements-----
 
-// Adding height customly using the getComputedStyle()
-message.style.height =
-  Number.parseFloat(getComputedStyle(message).height) + 40 + 'px'
+// // header.prepend(message) // Adds element to the first position of header
+// header.append(message) // Adds element to the last of header
 
-// Using the CSS variable by .setProperty()
-document.documentElement.style.setProperty('--color-primary', 'skyblue')
+// // header.before(message) // Adds before the header
+// // header.after(message) // Adds after the header
 
-// ----------------Attributes ---------------------
+// // ------------Deleting ------------
 
-const logo = document.querySelector('.nav__logo')
-console.log(logo.alt)
-console.log(logo.src)
-console.log(logo.className)
+// document
+//   .querySelector('.btn--close-cookie')
+//   .addEventListener('click', function () {
+//     message.remove() // deletes the element
+//     // message.parentElement.removeChild(message)
+//   })
 
-// set attributes
-logo.alt = "Bankist's world's best logo ever"
-console.log(logo.alt)
+// // ----------- Styles ---------------
 
-// Non-Standard
-console.log(logo.designer) // Wont work
-console.log(logo.getAttribute('designer'))
-logo.setAttribute('company', "Aman's Bankist")
-console.log(logo)
+// message.style.backgroundColor = '#37383d'
+// message.style.width = '120%'
 
-const link = document.querySelector('.nav__link')
+// // Note : getComputedStyle() gives the style of the CSS sheet
+// console.log(getComputedStyle(message).height)
 
-// gives the absolute link
-console.log(link.href)
-// gives the link we provided
-console.log(link.getAttribute('href'))
+// // Adding height customly using the getComputedStyle()
+// message.style.height =
+//   Number.parseFloat(getComputedStyle(message).height) + 40 + 'px'
 
-// Data Attributes
-console.log(logo.dataset.versionNumber) // for getting the data attributes
+// // Using the CSS variable by .setProperty()
+// document.documentElement.style.setProperty('--color-primary', 'skyblue')
 
-// -----------------Classes ------------------
-// logo.classList.add()
-// logo.classList.remove()
-// logo.classList.toggle()
-// logo.classList.contains()
+// // ----------------Attributes ---------------------
+
+// const logo = document.querySelector('.nav__logo')
+// console.log(logo.alt)
+// console.log(logo.src)
+// console.log(logo.className)
+
+// // set attributes
+// logo.alt = "Bankist's world's best logo ever"
+// console.log(logo.alt)
+
+// // Non-Standard
+// console.log(logo.designer) // Wont work
+// console.log(logo.getAttribute('designer'))
+// logo.setAttribute('company', "Aman's Bankist")
+// console.log(logo)
+
+// const link = document.querySelector('.nav__link')
+
+// // gives the absolute link
+// console.log(link.href)
+// // gives the link we provided
+// console.log(link.getAttribute('href'))
+
+// // Data Attributes
+// console.log(logo.dataset.versionNumber) // for getting the data attributes
+
+// // -----------------Classes ------------------
+// // logo.classList.add()
+// // logo.classList.remove()
+// // logo.classList.toggle()
+// // logo.classList.contains()
+
+// const h1 = document.querySelector('h1')
+// const alertH1 = function (e) {
+//   alert('Clicked')
+// }
+
+// // 1. addEventListener()
+// // h1.addEventListener('mouseenter', alertH1)
+
+// // 2. onmouseenter -- Old school method(Dont use)
+// // h1.onmouseenter = function (e) {
+// //   alert('clicked once again')
+// // }
+
+// // 3. By using OnClick() in HTML -- Dont Use
+
+// // RemoveEventListener
+// // setTimeout(() => h1.removeEventListener('mouseenter', alertH1), 3000)
+
+// // ------------------Event Propagation----------------
+
+// // random Int function
+// const randomInt = (min, max) =>
+//   Math.floor(Math.random() * (max - min + 1) + min)
+
+// // random Coloe
+// const randomColor = () =>
+//   `rgb(${randomInt(0, 255)},${randomInt(0, 255)},${randomInt(0, 255)})`
+
+// // ------------Bubbling------------
+
+// // Note :1. e.target gives the element we clicked , so its gonna be same for all of them
+// //       2. this/e.currentkeyword keyword gives us the element on which the eventListener is attached
+
+// document.querySelector('.nav__link').addEventListener('click', function (e) {
+//   this.style.backgroundColor = randomColor()
+//   console.log('LINK', e.target, e.currentTarget)
+
+//   // To stop the event propagation
+//   // e.stopPropagation()  -- Never use it!!
+
+// })
+
+// document.querySelector('.nav__links').addEventListener('click', function (e) {
+//   this.style.backgroundColor = randomColor()
+//   console.log('Container', e.target, e.currentTarget)
+// })
+
+// document.querySelector('.nav').addEventListener('click', function (e) {
+//   this.style.backgroundColor = randomColor()
+//   console.log('NAV', e.target, e.currentTarget)
+// })
