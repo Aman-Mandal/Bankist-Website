@@ -74,6 +74,32 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
   }
 })
 
+// Operations Tabbed component
+const tabs = document.querySelectorAll('.operations__tab')
+const tabsContainer = document.querySelector('.operations__tab-container')
+const tabsContent = document.querySelectorAll('.operations__content')
+
+tabsContainer.addEventListener('click', function (e) {
+  // closest method
+  const clicked = e.target.closest('.operations__tab')
+
+  // Guard clause
+  if (!clicked) return // If nothing clicked then return
+
+  // Activate Tab
+  tabs.forEach(tab => tab.classList.remove('operations__tab--active'))
+  clicked.classList.add('operations__tab--active')
+  tabsContent.forEach(content =>
+    content.classList.remove('operations__content--active')
+  )
+
+  // Activate content
+  document
+    .querySelector(`.operations__content--${clicked.dataset.tab}`)
+    .classList.add('operations__content--active')
+})
+
+
 
 // ////////////////////////
 // ///////////////////////
@@ -228,3 +254,27 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
 //   this.style.backgroundColor = randomColor()
 //   console.log('NAV', e.target, e.currentTarget)
 // })
+
+// ---------------- DOM Traversing ------------------------
+
+// Going Upwards
+
+// const h1 = document.querySelector('h1')
+
+// console.log(h1.querySelectorAll('.highlight'))
+// console.log(h1.childNodes)
+// console.log(h1.children)
+// h1.firstElementChild.style.color = 'white'
+// h1.lastElementChild.style.color = 'black'
+
+// // Going Downwards
+
+// console.log(h1.parentNode)
+// console.log(h1.parentElement)
+// h1.closest('.header').style.background = 'orangered'
+
+// // Going Sideways
+// console.log(h1.previousSibling)
+// console.log(h1.nextSibling)
+// console.log(h1.previousElementSibling)
+// console.log(h1.nextElementSibling)
