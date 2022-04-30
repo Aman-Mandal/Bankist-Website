@@ -83,7 +83,6 @@ document.querySelector('.nav__links').addEventListener('click', function (e) {
 })
 
 // Operations Tabbed component
-
 tabsContainer.addEventListener('click', function (e) {
   // closest method
   const clicked = e.target.closest('.operations__tab')
@@ -118,10 +117,86 @@ const menuFade = function (e) {
   }
 }
 
-// Passing "argument" in handler function
+// Passing "argument" in handler function using .bind()
 nav.addEventListener('mouseover', menuFade.bind(0.5))
 
 nav.addEventListener('mouseout', menuFade.bind(1))
+
+// -------------------Sticky Navigation Bar-------------------
+
+// using 'Scroll' Event : Never Use it
+// const initailCoords = section1.getBoundingClientRect()
+
+// window.addEventListener('scroll', function () {
+//   // console.log(this.window.scrollY, initailCoords)
+
+//   window.scrollY > initailCoords.top
+//     ? nav.classList.add('sticky')
+//     : nav.classList.remove('sticky')
+// })
+
+// using Intersection Observer API
+// const obsCallback = function(entries){
+//   entries.forEach(entry => console.log(entry))
+// }
+
+// const options = {
+//   root: null,
+//   threshold: [0, 0.2, 1],
+// }
+// const observer = new IntersectionObserver(obsCallback, options)
+// observer.observe(section1)
+
+// INTERSECTION OBSERVER API
+const header = document.querySelector('.header')
+const navHeight = nav.getBoundingClientRect().height
+// console.log(navHeight)
+
+const stickyNav = function (entries) {
+  const [entry] = entries
+  // console.log(entry)
+
+  if (!entry.isIntersecting) {
+    nav.classList.add('sticky')
+  } else {
+    nav.classList.remove('sticky')
+  }
+}
+
+// observer api
+const headerObserver = new IntersectionObserver(stickyNav, {
+  threshold: 0,
+  root: null,
+  rootMargin: `-${navHeight}px`,
+})
+headerObserver.observe(header)
+
+// ----------------Reveal Sections------------------
+
+const allSections = document.querySelectorAll('.section')
+
+// callback
+const revealSection = function (entries, observer) {
+  const [entry] = entries
+
+  // Guard clause
+  if (!entry.isIntersecting) return
+  entry.target.classList.remove('section--hidden')
+
+  // unobserve method
+  observer.unobserve(entry.target)
+}
+
+// Intersection Observer API
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.2,
+})
+
+allSections.forEach(function (section) {
+  sectionObserver.observe(section)
+  section.classList.add('section--hidden')
+})
 
 // ////////////////////////
 // ///////////////////////
